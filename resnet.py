@@ -77,6 +77,27 @@ def train(train_count,valid_count,istrain=False):
                         use_multiprocessing=False)
     end = time.time()
     print("train finished, cost time = {} hours".format(round((end - start) / 3600.0,3)))
+    return history
+
+def plot_train_acc(history):
+    import matplotlib.pyplot as plt
+    plt.plot(history.history['acc'])
+    plt.plot(history.history['val_acc'])
+    plt.title('Model accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epoch')
+    plt.legend(['Train', 'Test'], loc='upper left')
+    plt.savefig("acc.png")
+
+def plot_train_loss(history):
+    import matplotlib.pyplot as plt
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('Model loss')
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.legend(['Train', 'Test'], loc='upper left')
+    plt.savefig("loss.png")
 
 def test(model_path,image_dir):
     model = build_model(False)
@@ -101,6 +122,8 @@ def test(model_path,image_dir):
 
 
 if __name__=="__main__":
-    # train(train_count,valid_count,istrain=True)
-    test('./models/resnet-03-0.6081.h5',"./PetImages/test/dog")
+    history = train(train_count,valid_count,istrain=True)
+    plot_train_loss(history)
+    plot_train_acc(history)
+    # test('./models/resnet-03-0.6081.h5',"./PetImages/test/dog")
 
